@@ -1,7 +1,8 @@
 const express = require("express");
 const upload = require("../config/multer");
 const router = express.Router();
-// body has only text data file is another thing in req.
+// we need something to accept file that is why we make upload.single("key");
+// body has only text data, file is another thing in req.
 router.post('/',upload.single("image"),(req,res)=>{
     try{
         let body= req.body;
