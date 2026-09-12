@@ -22,7 +22,7 @@ const createNotesController = async (req,res)=>{
     let {title, description} = req.body;
     const newNote = await NotesModel.create({
         title,
-        description,
+        description, 
     }) 
     return res.status(201).json({
         message: "note created successfully",
