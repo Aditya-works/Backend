@@ -16,7 +16,7 @@ app.get("/:code", async function(req, res){
     await urlModel.findOneAndUpdate({
         shortCode: code
     },{
-        $inc: {clicks: 1}
+        $inc: {clicks: 1}// inc operator
     })
 })
 export default app
