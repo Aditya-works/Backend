@@ -1,0 +1,44 @@
+import express from "express"
+import generateCode from "../utils/generateCode.js"
+import urlModel from "../models/url.mode.js"
+
+const router =express.Router()
+
+router.post("/", async function(req, res){
+    const { url } = req.body
+    if(!url){
+        return res.status(400).json({error: "url is required"})
+    }
+    if((url.startsWith("http://")==false) && (url.startsWith("https://")==false)){
+        return res.status(400).json({error: "please enter a valid url starting with http:// or https://"})
+    }
+    if(url.length>2048){
+        return res.status(400).json({error: "url is too long"})
+    }
+
+    const code = generateCode();
+    const newUrl = await urlModel.create({
+        originalUrl: url,
+        shortCode: code,
+
+    })
+
+    return res.status(201).json({
+        message: "url is shortened",
+        data:{
+            originalUrl: newUrl.originalUrl,
+            shortCode: newUrl.shortCode,
+        }
+    })
+})
+
+router.get("/", async function(req, res){
+    const urls = await urlModel.find()
+    return res.status(200).json({
+        message: "urls fetched successfully",
+        data:{
+            urls
+        }
+    })
+})
+export default router
