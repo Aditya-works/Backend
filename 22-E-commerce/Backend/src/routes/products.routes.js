@@ -3,6 +3,7 @@ import { createProductValidator } from "../validators/product.validator.js"
 import {authenticate} from "../middlewares/auth.middleware.js"
 import { createProduct } from "../controllers/product.controller.js"
 import multer from "multer"
+import { listAllProducts } from "../controllers/product.controller.js"
 const upload = multer({storage:multer.memoryStorage(),
     limits:{
         files: 5, 
@@ -10,6 +11,7 @@ const upload = multer({storage:multer.memoryStorage(),
     }
 })
 const router = Router()
+
 router.post("/", authenticate, (req, res, next)=>{
     if(req.user.role!=="seller"){
         return res.status(403).json({
@@ -18,10 +20,11 @@ router.post("/", authenticate, (req, res, next)=>{
     }
     next()
 }, upload.array("images"), (req, res, next)=>{
-    req.body?.price &&(req.body.price = JSON.parse(req.body.price))
+    req.body?.price&&(req.body.price = JSON.parse(req.body.price))
     req.body?.sizes&&(req.body.sizes=JSON.parse(req.body.sizes))
 next()
 },
 createProductValidator,createProduct
 )
+router.get("/", authenticate, listAllProducts)
 export default router
