@@ -5,5 +5,6 @@ import { addToCart } from "../controllers/cart.controller.js"
 const router = Router()
 
 router.post("/",authenticate, addToCartValidator, addToCart)
+router.get("/",authenticate, async (req, res)=>{
 
-export default router
+    export default router
